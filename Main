@@ -3,15 +3,23 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleMiner = require('role.miner');
 var autoSpawn = require('autospawn');
-var defense = require('defense');
-var cleanup = require('cleanup');
+const defense = require('defense');
+const cleanup = require('cleanup');
 
 module.exports.loop = function () {
+
+if (Game.cpu.bucket >= 10000) Game.cpu.generatePixel()
         
-    let builder_count = 0
-    let harvester_count = 0
-    let upgrader_count = 0
-    let miner_count = 0
+     let builder_count = 1
+     let harvester_count = 1
+     let upgrader_count = 1
+     let miner_count = 1
+     
+    autoSpawn.run(Game.spawns['Stardew'],
+    builder_count,
+    harvester_count,
+    upgrader_count,
+    miner_count);
     
     for(var name in Game.creeps) {
         const creep = Game.creeps[name];
