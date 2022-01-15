@@ -18,7 +18,6 @@ if (Game.cpu.bucket >= 10000) Game.cpu.generatePixel()
      let upgrader_count = 1
      let miner_count = 1
     
-    // Game.spawns['Stardew'].spawnCreep([CLAIM,MOVE], "Knighzaid", {memory: {role: 'claimer'}})
     autoSpawn.run(Game.spawns['Stardew'],
     builder_count,
     harvester_count,
