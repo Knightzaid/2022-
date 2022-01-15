@@ -1,0 +1,124 @@
+var autoSpawn = {
+
+    run: function(spawner, builder_count,harvester_count,upgrader_count,miner_count) {
+        if (spawner) {
+            for(var name in Game.rooms) {
+            console.log("--- NEW TICK ---");
+            console.log('Stardew Lv ' + Game.rooms[name].controller.level + ' --- ' + 'Room ' + Game.rooms[name].name + ' has '+ Game.rooms[name].energyAvailable + '/' + Game.rooms[name].energyCapacityAvailable + ' Energy')
+
+            
+    /* LIST OF NAMES */    
+    var nameList = [
+    'Amy','James','Nicole','Charlie','Daphne','Tracy','Harry','Michelle','Grace','Pepper','Nancy','Olivia','Emma','Sophia','Amelia','Isabella','Evelyn','Charlotte'
+    ]; 
+    
+    /* SET NAMES FOR WORKER  */    
+    var finalName = "nameplace"
+    
+    const myObject = {
+      fullName: function(event){
+        document.getElementById("nameplace").innerHTML = randName();
+      }
+    }
+    
+    /* CREATE NAMES  */
+    function randName(){
+        finalName = nameList[Math.floor( Math.random() * nameList.length )];
+        if ( Math.random() > 0.5 ) {
+    }
+      return finalName;
+    };
+
+
+            if (spawner.room.controller.level > 1) {
+            var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.pos.roomName == spawner.room.name); {
+            }
+            
+            if(builders.length >= 1) {
+            console.log('Builder count: ' + builders.length);
+            }
+
+                if(builders.length < builder_count) {
+                var newName = (randName(finalName)) + ' 🧰';
+                if (spawner.createCreep([MOVE,MOVE,WORK,CARRY,CARRY], newName,
+                    {memory: {role: 'builder'}}) === ERR_NOT_ENOUGH_ENERGY)
+                    if (spawner.spawnCreep([WORK,CARRY,MOVE], newName,
+                        {memory: {role: 'builder'}}) === OK )
+                        console.log('Spawning new builder: ' + newName); 
+                }
+            }
+            
+            
+            if (spawner.room.controller.level >= 0) {
+            var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.pos.roomName == spawner.room.name); {
+            }
+            
+            if(upgraders.length >= 1) {
+            console.log('Upgrader count: ' + upgraders.length);
+            }
+      
+            if(upgraders.length < upgrader_count) {
+            var newName = (randName(finalName)) + ' 🐝'; 
+                if (spawner.spawnCreep([MOVE,MOVE,MOVE,MOVE,WORK,CARRY,CARRY,CARRY], newName,
+                        {memory: {role: 'upgrader'}}) === ERR_NOT_ENOUGH_ENERGY)
+                    if (spawner.spawnCreep([WORK,CARRY,CARRY,MOVE,MOVE], newName,
+                            {memory: {role: 'upgrader'}}) === ERR_NOT_ENOUGH_ENERGY)
+                        if (spawner.spawnCreep([WORK,CARRY,MOVE], newName,
+                                {memory: {role: 'upgrader'}}) === OK)
+                                    console.log('Spawning new upgrader: ' + newName); 
+                }
+            }
+            
+            
+            if (spawner.room.controller.level >= 1) {
+            var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.pos.roomName == spawner.room.name); {
+            }
+            
+            if(harvesters.length >= 1) {
+            console.log('Harvester count: ' + harvesters.length);
+            }
+        
+            if(harvesters.length < harvester_count) {
+            var newName = (randName(finalName)) + ' 🍯'; 
+            if (spawner.spawnCreep([MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY], newName,
+                {memory: {role: 'harvester'}}) === ERR_NOT_ENOUGH_ENERGY)
+                if (spawner.spawnCreep([WORK,CARRY,MOVE,MOVE], newName,
+                    {memory: {role: 'harvester'}}) === ERR_NOT_ENOUGH_ENERGY)
+                    if (spawner.spawnCreep([WORK,CARRY,MOVE], newName,
+                        {memory: {role: 'harvester'}}) === OK)
+                        console.log('Spawning new harvester: ' + newName);
+                }
+            }
+            
+            
+            
+            if (spawner.room.controller.level > 2) {
+            var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner' && creep.pos.roomName == spawner.room.name); {
+            }
+            
+            if(miners.length >= 1) {
+            console.log('Miner count: ' + miners.length);
+            }
+            
+            if(miners.length < miner_count) {
+                var newName = (randName(finalName)) + ' 🏷️️';
+                    if (spawner.spawnCreep([WORK,MOVE], newName,
+                        {memory: {role: 'miner'}}) === OK)
+                        console.log('Spawning new miner: ' + newName);
+                }
+            }
+
+                if(spawner.spawning) {
+                var spawningCreep = Game.creeps[spawner.spawning.name];
+                spawner.room.visual.text(
+                    '🌱' + spawningCreep.memory.role,
+                    spawner.pos.x,
+                    spawner.pos.y - 2,
+                    {align: 'center', opacity: 1, stroke: 'Black'});
+                }
+            }
+        }
+    }
+};
+
+module.exports = autoSpawn;
