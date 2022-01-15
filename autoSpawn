@@ -5,7 +5,8 @@ var autoSpawn = {
             for(var name in Game.rooms) {
             console.log("--- NEW TICK ---");
             console.log('Stardew Lv ' + Game.rooms[name].controller.level + ' --- ' + 'Room ' + Game.rooms[name].name + ' has '+ Game.rooms[name].energyAvailable + '/' + Game.rooms[name].energyCapacityAvailable + ' Energy')
-
+            
+            
             
     /* LIST OF NAMES */    
     var nameList = [
@@ -90,8 +91,7 @@ var autoSpawn = {
                 }
             }
             
-            
-            
+           
             if (spawner.room.controller.level > 2) {
             var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner' && creep.pos.roomName == spawner.room.name); {
             }
@@ -108,13 +108,48 @@ var autoSpawn = {
                 }
             }
 
-                if(spawner.spawning) {
+            if(spawner.spawning) {
                 var spawningCreep = Game.creeps[spawner.spawning.name];
                 spawner.room.visual.text(
                     '🌱' + spawningCreep.memory.role,
                     spawner.pos.x,
                     spawner.pos.y - 2,
                     {align: 'center', opacity: 1, stroke: 'Black'});
+            }
+            
+            if(Game.spawns.Stardew.room.energyCapacityAvailable <= 300 && Game.spawns.Stardew.room.energyAvailable >= 300){
+            if(Game.spawns.Stardew.room.controller.level >= 0){
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag11.pos, STRUCTURE_CONTAINER);  
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag12.pos, STRUCTURE_CONTAINER); 
+                }
+            }
+    
+            if(Game.spawns.Stardew.room.energyCapacityAvailable <= 300 && Game.spawns.Stardew.room.energyAvailable >= 300){
+            if(Game.spawns.Stardew.room.controller.level >= 2){
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag1.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag2.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag2.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag3.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag4.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag5.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag6.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag7.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag8.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag9.pos, STRUCTURE_EXTENSION);
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag10.pos, STRUCTURE_EXTENSION);
+                }
+            }
+            
+            if(Game.spawns.Stardew.room.energyCapacityAvailable <= 300 && Game.spawns.Stardew.room.energyAvailable >= 300){
+            if(Game.spawns.Stardew.room.controller.level >= 3){
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Tower1.pos, STRUCTURE_TOWER);
+                    }
+            }
+            
+            if(Game.spawns.Stardew.room.energyCapacityAvailable <= 300 && Game.spawns.Stardew.room.energyAvailable >= 300){
+            if(Game.spawns.Stardew.room.controller.level >= 4){
+                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Storage1.pos, STRUCTURE_STORAGE);
+                    } 
                 }
             }
         }
