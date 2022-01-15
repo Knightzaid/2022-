@@ -1,0 +1,38 @@
+var defense = {
+    
+    useTower: function () {
+
+    for (var rm in Game.rooms) {
+    towers = Game.spawns.Stardew.room.find(FIND_MY_STRUCTURES, {
+                    filter: { structureType: STRUCTURE_TOWER }
+                })
+        _.forEach(towers, function(towers){
+            var closestHostile = towers.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+            if(closestHostile) {
+                towers.attack(closestHostile);
+                console.log("ALERT!!! BASE UNDER ATTACK!!! THIS IS NOT A DRILL!!! ALERT!!!")
+            }
+            else {
+            var closestinjuredcreep = towers.pos.findClosestByRange(FIND_MY_CREEPS, {
+                filter: (creep) => creep.hits < creep.hitsMax
+            });
+            if (closestinjuredcreep) {
+            towers.heal(closestinjuredcreep)
+            console.log("Heal Protocol!!!")
+            }
+            else {
+            var closestDamagedStructure = towers.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL 
+            });
+            if(closestDamagedStructure) {
+                towers.repair(closestDamagedStructure);
+                console.log("Repair Protocol!!!")
+                        }
+                    }
+                }
+            })
+        }
+    }
+}
+    
+module.exports = defense;
