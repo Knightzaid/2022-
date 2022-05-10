@@ -1,155 +1,171 @@
-var autoSpawn = {
+vvar autoSpawn = {
 
-    run: function(spawner, builder_count,harvester_count,upgrader_count,miner_count) {
-        if (spawner) {
-            for(var name in Game.rooms) {
-            console.log("--- NEW TICK ---");
-            console.log('Stardew Lv ' + Game.rooms[name].controller.level + ' --- ' + 'Room ' + Game.rooms[name].name + ' has '+ Game.rooms[name].energyAvailable + '/' + Game.rooms[name].energyCapacityAvailable + ' Energy')
-            
-            
-            
-    /* LIST OF NAMES */    
-    var nameList = [
-    'Amy','James','Nicole','Charlie','Daphne','Tracy','Harry','Michelle','Grace','Pepper','Nancy','Olivia','Emma','Sophia','Amelia','Isabella','Evelyn','Charlotte'
-    ]; 
+    run: function(spawner, alpha_count, attacker_count, builder_count, filler_count, miner_count, upgrader_count, servant_count, claimer_count) {
+    if (spawner) {
+        for(var name in Game.rooms) {
     
-    /* SET NAMES FOR WORKER  */    
-    var finalName = "nameplace"
+    console.log("               ------ NEW TICK ------");
+    console.log(spawner.name + ' Lv ' + Game.rooms[name].controller.level + ' --- ' + '(' + Math.floor(100* Game.rooms[name].controller.progress / Game.rooms[name].controller.progressTotal) + '%' + ')' + ' --- ' + 'Room ' + Game.rooms[name].name + ' has '+ Game.rooms[name].energyAvailable + '/' + Game.rooms[name].energyCapacityAvailable + ' Energy');
+
+        var nameList = ['Amy','James','Nicole','Charlie','Daphne','Tracy','Harry','Michelle','Grace','Pepper','Nancy','Olivia','Emma','Sophia','Amelia','Isabella','Evelyn','Charlotte']; 
     
-    const myObject = {
-      fullName: function(event){
+        var finalName = "nameplace"
+    
+        const myObject = {
+        fullName: function(event){
         document.getElementById("nameplace").innerHTML = randName();
-      }
-    }
-    
-    /* CREATE NAMES  */
-    function randName(){
+            }
+        }
+        
+        function randName(){
         finalName = nameList[Math.floor( Math.random() * nameList.length )];
         if ( Math.random() > 0.5 ) {
-    }
-      return finalName;
-    };
-
-
-            if (spawner.room.controller.level > 1) {
-            var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.pos.roomName == spawner.room.name); {
             }
+          return finalName;
+        }
+    
+            var alphas = _.filter(Game.creeps, (creep) => creep.memory.role == 'alpha'); {
+            var attackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'attacker'); {
+            var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder'); {
+            var fillers = _.filter(Game.creeps, (creep) => creep.memory.role == 'filler' ); {
+            var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' ); {
+            var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner' ); {
+            var servants = _.filter(Game.creeps, (creep) => creep.memory.role == 'servant'); {
+            var claimers = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer'); {
+            var totalCreep = alphas.length + builders.length + fillers.length + upgraders.length + miners.length + servants.length + claimers.length
+            var energy = spawner.room.energyAvailable
+            var home = spawner.room
+
+            var targets = Game.rooms[name].find(FIND_MY_CONSTRUCTION_SITES);
+            var totalBuilds = targets.length
             
-            if(builders.length >= 1) {
-            console.log('Builder count: ' + builders.length);
+            console.log("Alphas       : " + alphas.length + " --- " + alphas.map(alpha => alpha.name + '(' + Math.floor(100* alpha.ticksToLive/1500) + '%' + ')').join(', '))
+            console.log("Attacker     : " + attackers.length + " --- " + attackers.map(attacker => attacker.name + '(' + Math.floor(100* attacker.ticksToLive/1500) + '%' + ')').join(', '))
+            console.log("Builders     : " + builders.length + " --- " + builders.map(builder => builder.name + '(' + Math.floor(100* builder.ticksToLive/1500) + '%' + ')').join(', '))
+            console.log("Claimers     : " + claimers.length + " --- " + claimers.map(claimer => claimer.name + '(' + Math.floor(100* claimer.ticksToLive/1500) + '%' + ')').join(', '))
+            console.log("Fillers      : " + fillers.length + " --- " + fillers.map(filler => filler.name + '(' + Math.floor(100* filler.ticksToLive/1500) + '%' + ')').join(', '))
+            console.log("Upgraders    : " + upgraders.length + " --- " + upgraders.map(upgrader => upgrader.name + '(' + Math.floor(100* upgrader.ticksToLive/1500) + '%' + ')').join(', '))
+            console.log("Miners       : " + miners.length + " --- " + miners.map(miner => miner.name + '(' + Math.floor(100* miner.ticksToLive/1500) + '%' + ')').join(', '))
+            console.log("Servants     : " + servants.length + " --- " + servants.map(servant => servant.name + '(' + Math.floor(100* servant.ticksToLive/1500) + '%' + ')').join(', '))
+            console.log("Total Creeps : " + totalCreep)                                       
+            console.log("Total Builds : " + totalBuilds + " --- " + targets.map(targets => targets.structureType + '(' + Math.floor(100* targets.progress/targets.progressTotal) + '%' + ')').join(', '))
+            
+            
+        StructureSpawn.prototype.createCustomCreep =
+        function (energy, creepName, roleName, home) {
+            var numberOfParts = Math.floor(energy / 200);
+            var body = [];
+            for (let i = 0; i < numberOfParts; i++) {
+                body.push(WORK);
+            }
+            for (let i = 0; i < numberOfParts; i++) {
+                body.push(CARRY);
+            }
+            for (let i = 0; i < numberOfParts; i++) {
+                body.push(MOVE);
             }
 
-                if(builders.length < builder_count) {
-                var newName = (randName(finalName)) + ' 🧰';
-                if (spawner.createCreep([MOVE,MOVE,WORK,CARRY,CARRY], newName,
-                    {memory: {role: 'builder'}}) === ERR_NOT_ENOUGH_ENERGY)
-                    if (spawner.spawnCreep([WORK,CARRY,MOVE], newName,
-                        {memory: {role: 'builder'}}) === OK )
-                        console.log('Spawning new builder: ' + newName); 
+            return this.createCreep(body, creepName, {
+                role: roleName,
+                home: home, 
+                working: false
+            });
+        };
+        
+        StructureSpawn.prototype.createCustomCreepAttacker =
+        function (energy, creepName, roleName, home) {
+            var numberOfParts = Math.floor(energy / 130);
+            var body = [];
+            for (let i = 0; i < numberOfParts; i++) {
+                body.push(ATTACK);
+            }
+            for (let i = 0; i < numberOfParts; i++) {
+                body.push(MOVE);
+            }
+
+            return this.createCreep(body, creepName, {
+                role: roleName,
+                home: home, 
+                working: false
+            });
+        };
+            
+            if(attackers.length < attacker_count) {
+            var newName = (randName(finalName)) + ' A️';
+            spawner.createCustomCreepAttacker(energy, newName, 'attacker', home);
+            console.log('Spawning new attacker: ' + newName); 
                 }
             }
             
-            
-            if (spawner.room.controller.level >= 0) {
-            var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.pos.roomName == spawner.room.name); {
+            if(alphas.length < alpha_count) {
+            var newName = (randName(finalName)) + ' 🐛️';
+            spawner.createCustomCreep(energy, newName, 'alpha', home);
+            console.log('Spawning new alpha: ' + newName); 
+                }
             }
-            
-            if(upgraders.length >= 1) {
-            console.log('Upgrader count: ' + upgraders.length);
+                
+            if(claimers.length < claimer_count) {
+            var newName = (randName(finalName)) + ' 🌺️️';
+                if(spawner.spawnCreep([MOVE,CLAIM], newName,   
+                    {memory: {role: 'claimer'}}) === OK)
+                    console.log('Spawning new claimer: ' + newName); 
+                }
             }
-      
+
+            if(targets.length > 0 && builders.length < builder_count) {
+            var newName = (randName(finalName)) + ' 🧰';
+            spawner.createCustomCreep(energy, newName, 'builder');
+            console.log('Spawning new builder: ' + newName); 
+                }
+            }
+
+
             if(upgraders.length < upgrader_count) {
             var newName = (randName(finalName)) + ' 🐝'; 
-                if (spawner.spawnCreep([MOVE,MOVE,MOVE,MOVE,WORK,CARRY,CARRY,CARRY], newName,
-                        {memory: {role: 'upgrader'}}) === ERR_NOT_ENOUGH_ENERGY)
-                    if (spawner.spawnCreep([WORK,CARRY,CARRY,MOVE,MOVE], newName,
-                            {memory: {role: 'upgrader'}}) === ERR_NOT_ENOUGH_ENERGY)
-                        if (spawner.spawnCreep([WORK,CARRY,MOVE], newName,
-                                {memory: {role: 'upgrader'}}) === OK)
-                                    console.log('Spawning new upgrader: ' + newName); 
+            spawner.createCustomCreep(energy, newName, 'upgrader');
+            console.log('Spawning new upgrader: ' + newName); 
                 }
             }
             
             
-            if (spawner.room.controller.level >= 1) {
-            var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.pos.roomName == spawner.room.name); {
-            }
-            
-            if(harvesters.length >= 1) {
-            console.log('Harvester count: ' + harvesters.length);
-            }
-        
-            if(harvesters.length < harvester_count) {
-            var newName = (randName(finalName)) + ' 🍯'; 
-            if (spawner.spawnCreep([MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY], newName,
-                {memory: {role: 'harvester'}}) === ERR_NOT_ENOUGH_ENERGY)
-                if (spawner.spawnCreep([WORK,CARRY,MOVE,MOVE], newName,
-                    {memory: {role: 'harvester'}}) === ERR_NOT_ENOUGH_ENERGY)
-                    if (spawner.spawnCreep([WORK,CARRY,MOVE], newName,
-                        {memory: {role: 'harvester'}}) === OK)
-                        console.log('Spawning new harvester: ' + newName);
+            if(servants.length < servant_count && miners.length <= miner_count) {
+            var newName = (randName(finalName)) + ' 🕷️️';
+                if (spawner.spawnCreep([MOVE,WORK,CARRY], newName,
+                    {memory: {role: 'servant'}}) === OK)
+                        console.log('Spawning new servant: ' + newName); 
                 }
             }
             
-           
-            if (spawner.room.controller.level > 2) {
-            var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner' && creep.pos.roomName == spawner.room.name); {
-            }
-            
-            if(miners.length >= 1) {
-            console.log('Miner count: ' + miners.length);
+            if(fillers.length < filler_count) {
+            var newName = (randName(finalName)) + ' 👾';
+                if (spawner.spawnCreep([MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY], newName,
+                    {memory: {role: 'filler'}}) === ERR_NOT_ENOUGH_ENERGY)
+                    if (spawner.spawnCreep([MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY], newName,
+                        {memory: {role: 'filler'}}) === ERR_NOT_ENOUGH_ENERGY)
+                        if (spawner.spawnCreep([MOVE,MOVE,MOVE,CARRY,CARRY,CARRY], newName,
+                            {memory: {role: 'filler'}}) === ERR_NOT_ENOUGH_ENERGY)
+                            if (spawner.spawnCreep([MOVE,MOVE,CARRY,CARRY], newName,
+                                {memory: {role: 'filler'}}) === ERR_NOT_ENOUGH_ENERGY)
+                                if (spawner.spawnCreep([MOVE,CARRY], newName,
+                                    {memory: {role: 'filler'}}) === OK)
+                                    console.log('Spawning new filler: ' + newName);
+                }
             }
             
             if(miners.length < miner_count) {
-                var newName = (randName(finalName)) + ' 🏷️️';
-                    if (spawner.spawnCreep([WORK,MOVE], newName,
-                        {memory: {role: 'miner'}}) === OK)
-                        console.log('Spawning new miner: ' + newName);
-                }
-            }
-
-            if(spawner.spawning) {
-                var spawningCreep = Game.creeps[spawner.spawning.name];
-                spawner.room.visual.text(
-                    '🌱' + spawningCreep.memory.role,
-                    spawner.pos.x,
-                    spawner.pos.y - 2,
-                    {align: 'center', opacity: 1, stroke: 'Black'});
-            }
-            
-            if(Game.spawns.Stardew.room.energyCapacityAvailable <= 300 && Game.spawns.Stardew.room.energyAvailable >= 300){
-            if(Game.spawns.Stardew.room.controller.level >= 0){
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag11.pos, STRUCTURE_CONTAINER);  
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag12.pos, STRUCTURE_CONTAINER); 
-                }
-            }
-    
-            if(Game.spawns.Stardew.room.energyCapacityAvailable <= 300 && Game.spawns.Stardew.room.energyAvailable >= 300){
-            if(Game.spawns.Stardew.room.controller.level >= 2){
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag1.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag2.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag2.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag3.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag4.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag5.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag6.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag7.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag8.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag9.pos, STRUCTURE_EXTENSION);
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Flag10.pos, STRUCTURE_EXTENSION);
-                }
-            }
-            
-            if(Game.spawns.Stardew.room.energyCapacityAvailable <= 300 && Game.spawns.Stardew.room.energyAvailable >= 300){
-            if(Game.spawns.Stardew.room.controller.level >= 3){
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Tower1.pos, STRUCTURE_TOWER);
-                    }
-            }
-            
-            if(Game.spawns.Stardew.room.energyCapacityAvailable <= 300 && Game.spawns.Stardew.room.energyAvailable >= 300){
-            if(Game.spawns.Stardew.room.controller.level >= 4){
-                Game.spawns['Stardew'].room.createConstructionSite(Game.flags.Storage1.pos, STRUCTURE_STORAGE);
-                    } 
+            var newName = (randName(finalName)) + ' 🏷️';
+            if (spawner.spawnCreep([MOVE,WORK,WORK,WORK,WORK,WORK], newName,
+                    {memory: {role: 'miner'}}) === ERR_NOT_ENOUGH_ENERGY)
+                    if (spawner.spawnCreep([MOVE,WORK,WORK,WORK,WORK], newName,
+                        {memory: {role: 'miner'}}) === ERR_NOT_ENOUGH_ENERGY)
+                        if (spawner.spawnCreep([MOVE,WORK,WORK,WORK], newName,
+                            {memory: {role: 'miner'}}) === ERR_NOT_ENOUGH_ENERGY)
+                            if (spawner.spawnCreep([MOVE,WORK,WORK], newName,
+                                {memory: {role: 'miner'}}) === ERR_NOT_ENOUGH_ENERGY)
+                                if (spawner.spawnCreep([MOVE,WORK], newName,
+                                    {memory: {role: 'miner'}}) === OK)
+                                    console.log('Spawning new miner: ' + newName);
+                    }   
                 }
             }
         }
