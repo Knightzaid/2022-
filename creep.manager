@@ -1,0 +1,47 @@
+var roleAlpha = require('role.alpha');
+var roleAttacker =require('role.attacker')
+var roleBuilder = require('role.builder');
+var roleClaimer = require('role.claimer');
+var roleFiller = require('role.filler')
+var roleMiner = require('role.miner');
+var roleUpgrader = require('role.upgrader');
+var roleServant = require('role.servant')
+
+var roles = {
+    
+    run: function() {
+
+    for(var name in Game.creeps) {
+        const creep = Game.creeps[name];
+        switch (creep.memory.role) {
+        case 'alpha':
+            roleAlpha.run(creep);
+            break;
+        case 'attacker':
+            roleAttacker.run(creep);
+            break;
+        case 'builder':
+            roleBuilder.run(creep);
+            break;
+        case 'claimer':
+            roleClaimer.run(creep);
+            break;
+        case 'filler':
+            roleFiller.run(creep);
+            break;
+        case 'miner':
+            roleMiner.run(creep);
+            break;
+        case 'upgrader':
+            roleUpgrader.run(creep);
+            break;
+        case 'servant':
+            roleServant.run(creep);
+            break;
+            }
+        }
+    }
+};
+
+module.exports = roles;
+
