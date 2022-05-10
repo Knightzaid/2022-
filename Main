@@ -1,44 +1,74 @@
-var roleHarvester = require('role.harvester');
-var roleUpgrader = require('role.upgrader');
-var roleBuilder = require('role.builder');
-var roleMiner = require('role.miner');
+var autoConstruct = require('autoconstruct');
 var autoSpawn = require('autospawn');
-var defense = require('defense');
 var cleanup = require('cleanup');
+var creepManager = require('creep.manager');
+var defense = require('defense');
 
 module.exports.loop = function () {
     
-cleanup.clearMemory();
-defense.useTower();
-
 if (Game.cpu.bucket >= 10000) Game.cpu.generatePixel()
-        
-     let builder_count = 1
-     let harvester_count = 1
-     let upgrader_count = 1
-     let miner_count = 1
     
-    autoSpawn.run(Game.spawns['Stardew'],
+    for (var spawnname in Game.spawns) {
+    let spawner = Game.spawns[spawnname];
+    }
+    
+    autoConstruct.run(Game.spawns[spawnname]);    
+    cleanup.clearMemory();
+    defense.useTower();
+    creepManager.run();  
+
+    let alpha_count = 0
+    let attacker_count = 0
+    let builder_count = 1
+    let filler_count = 1
+    let miner_count = 2
+    let upgrader_count = 2
+    let servant_count = 1
+    let claimer_count = 0
+
+    autoSpawn.run(Game.spawns[spawnname],
+    alpha_count, 
+    attacker_count,
     builder_count,
-    harvester_count,
+    filler_count,
+    miner_count,
     upgrader_count,
-    miner_count);
+    servant_count,
+    claimer_count);
     
-    for(var name in Game.creeps) {
-        const creep = Game.creeps[name];
-        switch (creep.memory.role) {
-        case 'harvester':
-            roleHarvester.run(creep);
-            break;
-        case 'upgrader':
-            roleUpgrader.run(creep);
-            break;
-        case 'builder':
-            roleBuilder.run(creep);
-            break;
-        case 'miner':
-            roleMiner.run(creep);
-            break;
+    function createRoad(room, path) {
+        
+    _.forEach(path, pathCoordinates => room.createConstructionSite(pathCoordinates.x, pathCoordinates.y, STRUCTURE_ROAD));
+}
+
+    function createCommonRoads(room) {
+   
+    for (var spawnname in Game.spawns) {
+    let spawner = Game.spawns[spawnname];
+    }
+    var spawns = room.find(FIND_MY_SPAWNS)
+    var sources = room.find(FIND_SOURCES)
+
+    const paths = [..._.map(sources, source => room.findPath(Game.spawns[spawnname].pos, source.pos, { range: 1, ignoreCreeps: true }))];
+
+    if (Game.spawns[spawnname].room.controller.level >= 4) {
+    _.forEach(paths, path => createRoad(room, path));
+    }
+}
+
+    createCommonRoads(_.first(Object.values(Game.rooms)));
+
+    for (var spawnname in Game.spawns) {
+    let spawner = Game.spawns[spawnname];
+
+    if (spawner.spawning) {
+    let spawningCreep = Game.creeps[spawner.spawning.name];
+    spawner.room.visual.text(
+    '🌱' + spawningCreep.memory.role + ' ' ,
+    spawner.pos.x,
+    spawner.pos.y - 2,
+    {align: 'center', opacity: 1, stroke: 'Black'});
+    
         }
     }
 }
