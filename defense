@@ -1,9 +1,9 @@
 var defense = {
     
-    useTower: function () {
-
-    for (var rm in Game.rooms) {
-    towers = Game.spawns.Stardew.room.find(FIND_MY_STRUCTURES, {
+useTower: function () {
+    
+    for (var name in Game.rooms) {
+    var towers = Game.rooms[name].find(FIND_MY_STRUCTURES, {
                     filter: { structureType: STRUCTURE_TOWER }
                 })
         _.forEach(towers, function(towers){
@@ -33,6 +33,6 @@ var defense = {
             })
         }
     }
-}
-    
+};
+
 module.exports = defense;
