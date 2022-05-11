@@ -1,19 +1,18 @@
 var roleMiner = {
 
     run: function(creep) {
-
-        var targets = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER) && (structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
-            }
-        });
+                
+    if (!creep.memory.SourceID){
         
-        if(targets.length > 0) {
-            if(creep.pos.getRangeTo(targets[0]) == 0) {
-                var source = creep.pos.findClosestByRange(FIND_SOURCES);
-                creep.harvest(source);
-            } else {
-                creep.moveTo(targets[0],{visualizePathStyle:{stroke: 'white', strokeWidth: .1, opacity: .5, lineStyle: 'dotted'}});
+        let occupiedSource = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner').map((Stardew) => Stardew.memory.SourceID);
+        let closestSource = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => occupiedSource.indexOf(source.id) == -1});
+        creep.memory.SourceID = closestSource.id;
+    }
+
+        let source = Game.getObjectById(creep.memory.SourceID);
+        if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        if (creep.moveTo(source, {noPathFinding: true}) == ERR_NOT_FOUND) {
+            creep.moveTo(source); 
             }
         }
     }
